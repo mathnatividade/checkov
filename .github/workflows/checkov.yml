@@ -1,0 +1,36 @@
+name: Checkov
+
+on: [push, pull_request]
+
+jobs:
+  checkov-job:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install Checkov
+      run: pip install checkov
+
+    - name: Run Checkov
+      id: checkov
+      run: checkov -d . --framework dockerfile --output-format github_failed_only
+
+    - name: Add PR comment with Checkov results
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const fs = require('fs');
+          const checkovOutput = fs.readFileSync('results.json', 'utf8');
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: checkovOutput
+          });
