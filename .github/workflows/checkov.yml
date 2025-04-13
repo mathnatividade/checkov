@@ -29,8 +29,13 @@ jobs:
       with:
         script: |
           const fs = require('fs');
+          const core = require('@actions/core');
+          const github = require('@actions/github');
+
           const checkovOutput = fs.readFileSync('checkov_output.txt', 'utf8');
-          github.rest.issues.createComment({
+          const context = github.context;
+
+          github.getOctokit(core.getInput('github-token')).rest.issues.createComment({
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
