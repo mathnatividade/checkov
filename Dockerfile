@@ -15,3 +15,5 @@ COPY . .
 
 # Defina o comando padrão para executar a aplicação
 CMD ["python", "app.py"]
+
+# test2
