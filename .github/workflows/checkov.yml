@@ -1,6 +1,7 @@
 name: Checkov
 
-on: [push, pull_request]
+on:
+  pull_request:
 
 jobs:
   checkov-job:
@@ -20,7 +21,7 @@ jobs:
 
     - name: Run Checkov
       id: checkov
-      run: checkov -d . --framework dockerfile --output-format github_failed_only
+      run: checkov -d . --framework dockerfile --output-format json > results.json
 
     - name: Add PR comment with Checkov results
       uses: actions/github-script@v4
@@ -32,5 +33,5 @@ jobs:
             issue_number: context.issue.number,
             owner: context.repo.owner,
             repo: context.repo.repo,
-            body: checkovOutput
+            body: `Checkov Results:\n\n${checkovOutput}`
           });
