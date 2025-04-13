@@ -21,14 +21,15 @@ jobs:
 
     - name: Run Checkov
       id: checkov
-      run: checkov -d . --framework dockerfile -o cli > results.txt
+      run: |
+        checkov -d . --framework dockerfile -o github_failed_only | tee checkov_output.txt
 
     - name: Add PR comment with Checkov results
       uses: actions/github-script@v4
       with:
         script: |
           const fs = require('fs');
-          const checkovOutput = fs.readFileSync('results.txt', 'utf8');
+          const checkovOutput = fs.readFileSync('checkov_output.txt', 'utf8');
           github.rest.issues.createComment({
             issue_number: context.issue.number,
             owner: context.repo.owner,
