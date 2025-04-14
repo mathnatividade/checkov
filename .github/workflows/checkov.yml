@@ -10,8 +10,6 @@ jobs:
       contents: read
       issues: write
       pull-requests: write
-      # repository-projects: write
-      # id-token: write
 
     steps:
     - name: Checkout repository
