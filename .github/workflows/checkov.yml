@@ -7,10 +7,11 @@ jobs:
   checkov-job:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
+      issues: write
       pull-requests: write
-      repository-projects: write
-      id-token: write
+      # repository-projects: write
+      # id-token: write
 
     steps:
     - name: Checkout repository
